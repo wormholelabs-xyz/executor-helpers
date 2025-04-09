@@ -2,7 +2,7 @@
 
 #
 # This script deploys the CCTPv1ReceiveWithGasDropOff contract.
-# Usage: RPC_URL= MNEMONIC= EVM_CHAIN_ID= CIRCLE_MESSAGE_TRANSMITTER= ./sh/deployCCTPv1ReceiveWithGasDropOff.sh
+# Usage: RPC_URL= MNEMONIC= EVM_CHAIN_ID= CIRCLE_MESSAGE_TRANSMITTER_ADDR= ./sh/deployCCTPv1ReceiveWithGasDropOff.sh
 
 [[ -z $CIRCLE_MESSAGE_TRANSMITTER_ADDR ]] && { echo "Missing Circle Token Messenger address"; exit 1; }
 

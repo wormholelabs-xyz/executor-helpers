@@ -37,9 +37,9 @@ evm (main)$
 
 Here are the deployed contract addresses for each chain. The number after the chain name is the Wormhole chain ID configured for the contract.
 
-- Sepolia (10002): [](https://sepolia.etherscan.io/address/)
-- Base Sepolia (10004): [](https://sepolia.basescan.org/address/)
-- Avalanche Fuji (6): [](https://testnet.snowtrace.io/address/)
+- Sepolia (10002): [0x638DF05cF6e37dE4E69cE5fF32C4Ed8284502Dc4](https://sepolia.etherscan.io/address/0x638df05cf6e37de4e69ce5ff32c4ed8284502dc4)
+- Base Sepolia (10004): [0x638DF05cF6e37dE4E69cE5fF32C4Ed8284502Dc4](https://sepolia.basescan.org/address/0x638DF05cF6e37dE4E69cE5fF32C4Ed8284502Dc4)
+- Avalanche Fuji (6): [0x3AbE59000a0505979cC591bA975F474B46B65083](https://testnet.snowtrace.io/address/0x3AbE59000a0505979cC591bA975F474B46B65083)
 
 ### Bytecode Verification
 
