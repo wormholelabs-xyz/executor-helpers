@@ -1,3 +1,34 @@
+# CCTPv2ReceiveWithGasDropOff EVM Deployments
+
+## Testnet
+
+### May 5, 2025
+
+#### Modifications
+
+The same contract can be reused for v2, just pointed at the v2 MessageTransmitter.
+
+Only the following modification was made.
+
+```solidity
+string constant cctpWithExecutorVersion = "CCTPv2ReceiveWithGasDropOff-0.0.1";
+```
+
+#### Deployment Commands (Example)
+
+```bash
+RPC_URL=https://ethereum-sepolia-rpc.publicnode.com MNEMONIC=<PRIVATE_KEY> EVM_CHAIN_ID=11155111 CIRCLE_MESSAGE_TRANSMITTER_ADDR=0xE737e5cEBEEBa77EFE34D4aa090756590b1CE275 ./sh/deployCCTPv1ReceiveWithGasDropOff.sh
+forge verify-contract 0xd940731D42a76083477aA54417d2a0A61E226342 src/CCTPv1ReceiveWithGasDropOff.sol:CCTPv1ReceiveWithGasDropOff --watch --chain-id 11155111 --etherscan-api-key <API_KEY> --constructor-args $(cast abi-encode "constructor(address)" "0xE737e5cEBEEBa77EFE34D4aa090756590b1CE275")
+```
+
+#### Chains Deployed
+
+Here are the deployed contract addresses for each chain. The number after the chain name is the Wormhole chain ID configured for the contract.
+
+- Sepolia (10002): [0xd940731D42a76083477aA54417d2a0A61E226342](https://sepolia.etherscan.io/address/0xd940731D42a76083477aA54417d2a0A61E226342)
+- Base Sepolia (10004): [0xd940731D42a76083477aA54417d2a0A61E226342](https://sepolia.basescan.org/address/0xd940731D42a76083477aA54417d2a0A61E226342)
+- Avalanche Fuji (6): [0xd940731D42a76083477aA54417d2a0A61E226342](https://testnet.snowtrace.io/address/0xd940731D42a76083477aA54417d2a0A61E226342)
+
 # CCTPv1ReceiveWithGasDropOff EVM Deployments
 
 ## Testnet
