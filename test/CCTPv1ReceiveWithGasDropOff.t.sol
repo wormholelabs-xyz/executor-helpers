@@ -17,7 +17,7 @@ contract MockMessageTransmitter is ICircleV1MessageTransmitter {
         retVal = true;
     }
 
-    function receiveMessage(bytes calldata, bytes calldata) external returns (bool success) {
+    function receiveMessage(bytes calldata, bytes calldata) external view returns (bool success) {
         return retVal;
     }
 }
