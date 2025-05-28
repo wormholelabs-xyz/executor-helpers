@@ -42,6 +42,14 @@ Addresses from [Circle docs](https://developers.circle.com/stablecoins/aptos-pac
 aptos move compile --skip-fetch-latest-git-deps --named-addresses cctp_v1_receive_with_gas_drop_off=default,message_transmitter=0x081e86cebf457a0c6004f35bd648a2794698f52e0dde09a48619dcd3d4cc23d9,token_messenger_minter=0x5f9b937419dda90aa06c1836b7847f65bbbe3f1217567758dc2488be31a477b9,stablecoin=0x72d1e6aa6a648a3afc5d45d8d66b353f1e1837a728c0813beec77f28a697fa7a,aptos_extensions=0xb75a74c6f8fddb93fdc00194e2295d8d5c3f6a721e79a2b86884394dcc554f8f,deployer=default
 ```
 
+#### Mainnet
+
+Addresses from [Circle docs](https://developers.circle.com/stablecoins/aptos-packages) and [Executor repo](https://github.com/wormholelabs-xyz/example-messaging-executor/blob/aptos/aptos/DEPLOYMENTS.md)
+
+```bash
+aptos move compile --skip-fetch-latest-git-deps --named-addresses cctp_v1_receive_with_gas_drop_off=default,message_transmitter=0x177e17751820e4b4371873ca8c30279be63bdea63b88ed0f2239c2eea10f1772,token_messenger_minter=0x9bce6734f7b63e835108e3bd8c36743d4709fe435f44791918801d0989640a9d,stablecoin=0xe5c5befe31ce06bc1f2fd31210988aac08af6d821b039935557a6f14c03471be,aptos_extensions=0x98bce69c31ee2cf91ac50a3f38db7b422e3df7cdde9fe672ee1d03538a6aeae0,deployer=default
+```
+
 ### Deploy
 
 First initialize the config, setting the desired network and deployment private key.
@@ -57,4 +65,10 @@ Then, publish the module immutably via a resource account.
 
 ```bash
 aptos move create-resource-account-and-publish-package --address-name cctp_v1_receive_with_gas_drop_off --seed-encoding Utf8 --seed cctp_v1_receive_with_gas_drop_off_v0 --named-addresses message_transmitter=0x081e86cebf457a0c6004f35bd648a2794698f52e0dde09a48619dcd3d4cc23d9,token_messenger_minter=0x5f9b937419dda90aa06c1836b7847f65bbbe3f1217567758dc2488be31a477b9,stablecoin=0x72d1e6aa6a648a3afc5d45d8d66b353f1e1837a728c0813beec77f28a697fa7a,aptos_extensions=0xb75a74c6f8fddb93fdc00194e2295d8d5c3f6a721e79a2b86884394dcc554f8f,deployer=default
+```
+
+#### Mainnet
+
+```bash
+aptos move create-resource-account-and-publish-package --address-name cctp_v1_receive_with_gas_drop_off --seed-encoding Utf8 --seed cctp_v1_receive_with_gas_drop_off_v0 --named-addresses message_transmitter=0x177e17751820e4b4371873ca8c30279be63bdea63b88ed0f2239c2eea10f1772,token_messenger_minter=0x9bce6734f7b63e835108e3bd8c36743d4709fe435f44791918801d0989640a9d,stablecoin=0xe5c5befe31ce06bc1f2fd31210988aac08af6d821b039935557a6f14c03471be,aptos_extensions=0x98bce69c31ee2cf91ac50a3f38db7b422e3df7cdde9fe672ee1d03538a6aeae0,deployer=default
 ```
