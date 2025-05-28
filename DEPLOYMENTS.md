@@ -83,3 +83,44 @@ forge verify-bytecode <contract_addr> CCTPv1ReceiveWithGasDropOff --rpc-url <arc
 ```
 
 <!-- cspell:enable -->
+
+# MultiReceiveWithGasDropOff EVM Deployments
+
+## Testnet
+
+### May 28, 2025
+
+Commit Hash:
+
+<!-- cspell:disable -->
+
+```sh
+evm (main)$ git rev-parse HEAD
+897e50e98fa064a37677de259ee8eb90c1961ce1
+evm (main)$
+```
+
+<!-- cspell:enable -->
+
+Foundry Version:
+
+<!-- cspell:disable -->
+
+```sh
+evm (main)$ forge --version
+forge Version: 1.2.1-stable
+Commit SHA: 42341d5c94947d566c21a539aead92c4c53837a2
+Build Timestamp: 2025-05-26T05:24:48.799227114Z (1748237088)
+Build Profile: maxperf
+evm (main)$
+```
+
+<!-- cspell:enable -->
+
+#### Chains Deployed
+
+Here are the deployed contract addresses for each chain. The number after the chain name is the Wormhole chain ID configured for the contract.
+
+- Sepolia (10002): [0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d](https://sepolia.etherscan.io/address/0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d)
+- Base Sepolia (10004): [0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d](https://sepolia.basescan.org/address/0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d)
+- Avalanche Fuji (6): [0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d](https://testnet.snowtrace.io/address/0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d)
