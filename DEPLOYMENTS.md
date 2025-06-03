@@ -86,6 +86,55 @@ forge verify-bytecode <contract_addr> CCTPv1ReceiveWithGasDropOff --rpc-url <arc
 
 # MultiReceiveWithGasDropOff EVM Deployments
 
+## Mainnet
+
+### June 2, 2025
+
+#### Version Info
+
+Commit Hash:
+
+<!-- cspell:disable -->
+
+```sh
+example-ntt-with-executor (main)$ git rev-parse HEAD
+1f1504beca31ec7e94e93f315ab80318476540fd
+example-ntt-with-executor (main)$
+```
+
+<!-- cspell:enable -->
+
+Foundry Version:
+
+<!-- cspell:disable -->
+
+```sh
+evm (main)$ forge --version
+forge Version: 1.1.0-stable
+Commit SHA: d484a00089d789a19e2e43e63bbb3f1500eb2cbf
+Build Timestamp: 2025-04-30T13:50:49.971365000Z (1746021049)
+Build Profile: maxperf
+evm (main)$
+```
+
+<!-- cspell:enable -->
+
+#### Chains Deployed
+
+Here are the deployed contract addresses for each chain. The number after the chain name is the Wormhole chain ID configured for the contract.
+
+- Arbitrum (23): [0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d](https://arbiscan.io/address/0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d#code)
+- Avalanche (6): [0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d](https://snowtrace.io/address/0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d/contract/43114/code)
+- Base (30): [0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d](https://basescan.org/address/0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d#code)
+- Ethereum (2): [0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d](https://etherscan.io/address/0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d#code)
+- HyperEVM (47): [0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d](https://purrsec.com/address/0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d/contract)
+- Linea (38): [0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d](https://lineascan.build/address/0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d#code)
+- Optimism (24): [0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d](https://optimistic.etherscan.io/address/0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d#code)
+- Polygon (5): [0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d](https://polygonscan.com/address/0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d#code)
+- Sonic (52): [0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d](https://sonicscan.org/address/0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d#code)
+- Unichain (44): [0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d](https://uniscan.xyz/address/0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d#code)
+- World Chain (45): [0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d](https://worldscan.org/address/0xe3cc16Cffa085C78e5D8144C74Fa97e4Fe53d68d#code)
+
 ## Testnet
 
 ### May 28, 2025
