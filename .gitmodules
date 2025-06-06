@@ -7,3 +7,6 @@
 [submodule "aptos/cctp_v1_receive_with_gas_drop_off/lib/aptos-cctp"]
 	path = aptos/cctp_v1_receive_with_gas_drop_off/lib/aptos-cctp
 	url = https://github.com/circlefin/aptos-cctp
+[submodule "lib/example-messaging-executor"]
+	path = lib/example-messaging-executor
+	url = https://github.com/wormholelabs-xyz/example-messaging-executor
