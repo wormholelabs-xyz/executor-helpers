@@ -1,66 +1,17 @@
-## Foundry
+# Executor Helpers
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+This repo contains helpers that are useful for relaying messages supported by the [Executor framework](https://github.com/wormholelabs-xyz/example-messaging-executor). Particularly, these contracts focus on performing relays and drop-offs in a single transaction on chains that don't natively support client-side transaction composition.
 
-Foundry consists of:
+- EVM
+  - [CCTPv1ReceiveWithGasDropOff](./src/CCTPv1ReceiveWithGasDropOff.sol)
+  - [CCTPv2ReceiveWithGasDropOff](./src/CCTPv2ReceiveWithGasDropOff.sol)
+  - [MultiReceiveWithGasDropOff](./src/MultiReceiveWithGasDropOff.sol)
+  - [VAAv1ReceiveWithGasDropOff](./src/VAAv1ReceiveWithGasDropOff.sol)
+- Aptos
+  - [cctp_v1_receive_with_gas_drop_off](./aptos/cctp_v1_receive_with_gas_drop_off/sources/cctp_v1_receive_with_gas_drop_off.move)
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
-
-## Documentation
-
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+⚠ **This software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+implied. See the License for the specific language governing permissions and limitations under the License.** Or plainly
+spoken - this is a very complex piece of software which targets a bleeding-edge, experimental smart contract runtime.
+Mistakes happen, and no matter how hard you try and whether you pay someone to audit it, it may eat your tokens, set
+your printer on fire or startle your cat. Cryptocurrencies are a high-risk investment, no matter how fancy.
