@@ -16,10 +16,19 @@ if [ "${EVM_CHAIN_ID}X" == "X" ]; then
   EVM_CHAIN_ID=1337
 fi
 
+if [ -n "${CREATE2_ADDRESS}" ]; then
+  CREATE2_FLAG="--create2-deployer ${CREATE2_ADDRESS}"
+  echo "Using custom CREATE2 deployer at: ${CREATE2_ADDRESS}"
+else
+  CREATE2_FLAG=""
+  echo "Using default CREATE2 deployer"
+fi
+
 forge script ./script/DeployMultiReceiveWithGasDropOff.s.sol:DeployMultiReceiveWithGasDropOff \
 	--sig "run()" \
 	--rpc-url "$RPC_URL" \
 	--private-key "$MNEMONIC" \
+	$CREATE2_FLAG \
 	--broadcast ${FORGE_ARGS}
 
 returnInfo=$(cat ./broadcast/DeployMultiReceiveWithGasDropOff.s.sol/$EVM_CHAIN_ID/run-latest.json)
