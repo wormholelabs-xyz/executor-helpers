@@ -9,6 +9,8 @@ This repo contains helpers that are useful for relaying messages supported by th
   - [VAAv1ReceiveWithGasDropOff](./src/VAAv1ReceiveWithGasDropOff.sol)
 - Aptos
   - [cctp_v1_receive_with_gas_drop_off](./aptos/cctp_v1_receive_with_gas_drop_off/sources/cctp_v1_receive_with_gas_drop_off.move)
+- SVM (Solana)
+  - [relay_cost_protection](./svm/relay_cost_protection/programs/relay_cost_protection/src/lib.rs)
 
 ⚠ **This software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
 implied. See the License for the specific language governing permissions and limitations under the License.** Or plainly
