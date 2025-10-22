@@ -1,0 +1,5 @@
+target/
+!target/idl/
+node_modules/
+.claude
+app/
