@@ -116,3 +116,117 @@ This command will:
 2. Build and deploy the program
 3. Run the test suite
 4. Stop the validator
+
+## Optimization: Anchor Fallback Instructions
+
+### Overview
+
+The `relay_cost_protection` program currently uses a 1-byte instruction discriminator:
+
+```rust
+#[instruction(discriminator = 1)]
+pub fn check_balance(ctx: Context<CheckBalance>, min_balance: u64) -> Result<()>
+```
+
+This can be further optimized by using Anchor's **fallback instruction** feature to eliminate the discriminator entirely, saving 1 byte of instruction data.
+
+### How Fallback Instructions Work
+
+Anchor supports an undocumented feature where functions that **do not** take a `Context<...>` parameter are treated as fallback functions. When a program has exactly one fallback function, Anchor invokes it directly without requiring a discriminator.
+
+**Key characteristics:**
+- Removes the instruction discriminator (saves 1+ bytes)
+- Function signature does NOT include `Context<T>`
+- Anchor automatically routes to the fallback when no discriminator matches
+- Trade-off: IDL generation is not supported for fallback functions
+
+### Implementation Example
+
+Instead of the current implementation:
+
+```rust
+#[program]
+pub mod relay_cost_protection {
+    use super::*;
+
+    #[instruction(discriminator = 1)]
+    pub fn check_balance(ctx: Context<CheckBalance>, min_balance: u64) -> Result<()> {
+        require!(
+            ctx.accounts.payer.lamports() >= min_balance,
+            RelayError::InsufficientBalance
+        );
+        Ok(())
+    }
+}
+
+#[derive(Accounts)]
+pub struct CheckBalance<'info> {
+    #[account(mut)]
+    pub payer: Signer<'info>,
+}
+```
+
+You could use a fallback function:
+
+```rust
+#[program]
+pub mod relay_cost_protection {
+    use super::*;
+
+    // Fallback function - no Context parameter
+    pub fn fallback<'info>(
+        _program_id: &Pubkey,
+        accounts: &'info [AccountInfo<'info>],
+        instruction_data: &[u8],
+    ) -> Result<()> {
+        // Parse accounts manually
+        let account_iter = &mut accounts.iter();
+        let payer = next_account_info(account_iter)?;
+
+        // Parse instruction data (just min_balance as u64)
+        let min_balance = u64::from_le_bytes(
+            instruction_data[0..8].try_into().unwrap()
+        );
+
+        // Verify payer is signer
+        require!(payer.is_signer, ProgramError::MissingRequiredSignature);
+
+        // Check balance
+        require!(
+            payer.lamports() >= min_balance,
+            RelayError::InsufficientBalance
+        );
+
+        Ok(())
+    }
+}
+```
+
+### When to Use Fallback Instructions
+
+**Use fallback instructions when:**
+- Program has a single instruction
+- Instruction data is simple (no complex serialization needed)
+- Minimizing instruction data size is critical
+- IDL generation is not required (client can use raw transactions)
+
+**Avoid fallback instructions when:**
+- Program has multiple instructions (discriminator needed anyway)
+- Complex account validation logic benefits from Anchor's `Context` macros
+- IDL generation is important for client integration
+- Team prefers Anchor's type safety and automatic account parsing
+
+### References
+
+- [Anchor dispatch implementation](https://github.com/coral-xyz/anchor/blob/master/lang/syn/src/codegen/program/dispatch.rs#L54)
+- [Solana Transfer Hook example with fallback](https://solana.com/developers/guides/token-extensions/transfer-hook#fallback-instruction)
+
+### Current Implementation Choice
+
+The `relay_cost_protection` program uses a 1-byte discriminator rather than a fallback instruction because:
+1. The 1-byte overhead is minimal for this use case
+2. Anchor's `Context` provides better type safety
+3. IDL generation enables easier client integration
+4. The program is already deployed as immutable on mainnet
+
+For future programs with similar simplicity, the fallback approach could save that additional byte if needed.
