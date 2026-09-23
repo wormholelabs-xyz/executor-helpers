@@ -1,0 +1,16 @@
+[package]
+name = "post-vaa-relay-cpi-stub"
+version = "0.1.0"
+description = "Test double for the core bridge: echoes the received account metas and data through return data."
+edition = "2021"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "post_vaa_relay_cpi_stub"
+
+[dependencies]
+pinocchio = "=0.9.3"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }

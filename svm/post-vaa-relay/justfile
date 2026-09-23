@@ -1,0 +1,16 @@
+# `net` is the network feature: mainnet, testnet (Solana devnet cluster) or
+# localnet. It selects the core bridge id the relay accepts. It has no default.
+
+# Build both SBF programs into target/deploy. Tests load the ELFs from there.
+build net:
+    cd programs/post-vaa-relay && cargo build-sbf -- --locked --features {{net}}
+    cd programs/cpi-stub && cargo build-sbf -- --locked
+
+# Host lint for the selected network.
+check net:
+    cargo clippy --locked -p post-vaa-relay --features {{net}} --all-targets -- -D warnings
+    cargo clippy --locked -p post-vaa-relay-cpi-stub --all-targets -- -D warnings
+
+# Build the ELFs, then run the mollusk tests against them.
+test net: (build net)
+    cargo test --locked -p post-vaa-relay --features {{net}}

@@ -1,0 +1,3 @@
+# Mollusk loads program ELFs from this directory during `cargo test`.
+[env]
+SBF_OUT_DIR = { value = "target/deploy", relative = true }
