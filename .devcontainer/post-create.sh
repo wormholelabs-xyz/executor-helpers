@@ -7,10 +7,14 @@ sudo /usr/local/bin/init-firewall.sh
 
 echo "Setting up development environment..."
 
-# Top-level submodules only. aptos-cctp's nested submodules use git@ URLs and
-# need the manual rewrite described in aptos/README.md.
+# lib/ recursively: forge derives remappings from the nested checkouts, and an
+# empty lib/example-messaging-executor/evm/lib/forge-std makes it pick
+# `evm/src/` as that library's root, which breaks the imports. aptos-cctp's
+# nested submodules use git@ URLs and need the manual rewrite in aptos/README.md,
+# so the aptos submodule is initialised at the top level only.
 echo "Initialising git submodules..."
 git submodule update --init
+git submodule update --init --recursive -- lib
 
 # yarn.lock is audited before anything is installed from it. yarn 1 returns a
 # severity bitmask: 8 = high, 16 = critical. Either aborts the install.

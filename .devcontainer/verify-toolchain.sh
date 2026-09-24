@@ -71,10 +71,10 @@ ok "castellan verify" "active"
 
 echo "== submodules"
 cd "${REPO_ROOT}"
-for sub in lib/forge-std lib/openzeppelin-contracts lib/example-messaging-executor; do
-  [ -n "$(ls -A "${sub}" 2>/dev/null)" ] || fail "submodule ${sub} not initialised"
+for sub in lib/forge-std lib/openzeppelin-contracts lib/example-messaging-executor lib/example-messaging-executor/evm/lib/forge-std; do
+  [ -n "$(ls -A "${sub}" 2>/dev/null)" ] || fail "submodule ${sub} not initialised (post-create runs: git submodule update --init --recursive -- lib)"
 done
-ok "submodules" "lib/*"
+ok "submodules" "lib/* (recursive)"
 
 if [ "${RUN_BUILDS}" = "false" ]; then
   echo "== builds skipped (--no-build)"
