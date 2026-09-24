@@ -14,3 +14,13 @@ check net:
 # Build the ELFs, then run the mollusk tests against them.
 test net: (build net)
     cargo test --locked -p post-vaa-relay --features {{net}}
+
+# Fetch core bridge state and the fixture VAA through the RPC proxy.
+fetch-fixtures net:
+    bun scripts/fetch-fixtures.ts {{net}}
+
+# Build the relay ELF, then run the surfpool end-to-end tests. Every
+# transaction is a v1 transaction. Needs surfpool >= 1.6.0 on PATH.
+surfpool-test net: (build net)
+    test -f target/fixtures/{{net}}/core_bridge_programdata.json || just fetch-fixtures {{net}}
+    cargo test --locked -p post-vaa-relay --features {{net}} --test surfpool_e2e -- --include-ignored --nocapture --test-threads=1
