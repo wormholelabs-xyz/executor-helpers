@@ -357,10 +357,6 @@ COPY --from=bun /opt/bun/bun /usr/local/bin/bun
 COPY --from=just /opt/just/just /usr/local/bin/just
 COPY --from=surfpool /opt/surfpool/surfpool /usr/local/bin/surfpool
 
-# Ensure default node user has access to /usr/local/share/npm-global
-RUN mkdir -p /usr/local/share/npm-global && \
-  chown -R node:node /usr/local/share/npm-global
-
 ARG USERNAME=node
 
 # Persist bash history.
@@ -403,9 +399,7 @@ RUN mkdir -p /home/node/.local/share/solana/install/active_release/bin/platform-
 # Set up non-root user
 USER node
 
-# Install global packages
-ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
-ENV PATH="/home/node/.cargo/bin:/home/node/.local/share/solana/install/active_release/bin:${PATH}:/usr/local/share/npm-global/bin"
+ENV PATH="/home/node/.cargo/bin:/home/node/.local/share/solana/install/active_release/bin:${PATH}"
 
 # Set the default shell to zsh rather than sh
 ENV SHELL=/bin/zsh

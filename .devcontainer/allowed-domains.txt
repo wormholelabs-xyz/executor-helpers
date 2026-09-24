@@ -20,10 +20,8 @@ JsonList(https://api.github.com/meta, [web, api, git])
 .github.com
 .githubusercontent.com
 .githubassets.com
-.ghcr.io
 
 # Claude Required
-registry.npmjs.org
 api.anthropic.com
 .sentry.io
 statsig.anthropic.com
@@ -41,10 +39,6 @@ static.crates.io
 
 # Solana / Anchor
 release.anza.xyz
-api.apr.dev
-api.devnet.solana.com
-api.testnet.solana.com
-api.mainnet-beta.solana.com
 rpc.labsapis.com
 rpc-staging.labsapis.com
 # Wormholescan API: fixture VAAs for svm/post-vaa-relay surfpool tests
