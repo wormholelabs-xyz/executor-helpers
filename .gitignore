@@ -13,3 +13,12 @@ docs/
 
 # Code coverage files
 lcov.info
+
+# Node packages
+node_modules/
+
+# Rust build output
+target/
+
+# Anchor local state
+.anchor/
