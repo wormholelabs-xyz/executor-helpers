@@ -26,6 +26,9 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@908c540300062bd5a7e473851cdb4282204cee09 # v1.9.1
+        with:
+          # Sources are formatted with the pre-1.4.0 formatter; 1.4.0+ `forge fmt --check` fails.
+          version: v1.3.6
 
       - name: Show Forge version
         run: |
