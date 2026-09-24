@@ -1,0 +1,71 @@
+# Egress allow-list for the castellan DNS firewall.
+#
+# Each line's type is determined by its prefix (checked exact -> suffix -> wildcard -> regex):
+#
+#   api.anthropic.com                              exact host (case-insensitive)
+#   .sentry.io                                     suffix: matches sentry.io AND any subdomain *.sentry.io
+#   *.gallery.vsassets.io                          wildcard: any subdomain (one or more labels) of the suffix
+#   re:^[a-z0-9-]+\.pkg\.dev$                      regex matched against the whole lowercased name
+#   JsonList(https://example.com/ips, [key1, key2])        fetch JSON; keys are top-level string arrays
+#   JsonList(https://example.com/ips, [arr[].field])        fetch JSON; keys traverse array-of-objects
+#
+# Blank lines and everything after `#` are ignored.
+#
+# The allow-list is baked into the image at build time — edits here require a devcontainer
+# rebuild to take effect. Validate changes with: castellan check
+
+# GitHub — git/gh/clone over HTTPS. The published IP ranges are seeded into the static
+# allow-sets via JsonList below; the names must also be listed so the resolver answers them.
+JsonList(https://api.github.com/meta, [web, api, git])
+.github.com
+.githubusercontent.com
+.githubassets.com
+.ghcr.io
+
+# Claude Required
+registry.npmjs.org
+api.anthropic.com
+.sentry.io
+statsig.anthropic.com
+statsig.com
+platform.claude.com
+downloads.claude.ai
+
+# Repo Specific
+
+# Rust toolchain (rustup fetches toolchains named in rust-toolchain.toml on demand) and crates
+static.rust-lang.org
+crates.io
+index.crates.io
+static.crates.io
+
+# Solana / Anchor
+release.anza.xyz
+api.apr.dev
+api.devnet.solana.com
+api.testnet.solana.com
+api.mainnet-beta.solana.com
+rpc.labsapis.com
+rpc-staging.labsapis.com
+# Wormholescan API: fixture VAAs for svm/post-vaa-relay surfpool tests
+.wormholescan.io
+
+# yarn (anchor test installs the TypeScript test deps)
+registry.yarnpkg.com
+
+# Foundry: solc downloads, and the Sepolia fork the forge tests select
+binaries.soliditylang.org
+ethereum-sepolia-rpc.publicnode.com
+
+# Aptos
+api.mainnet.aptoslabs.com
+api.testnet.aptoslabs.com
+api.devnet.aptoslabs.com
+fullnode.mainnet.aptoslabs.com
+fullnode.testnet.aptoslabs.com
+fullnode.devnet.aptoslabs.com
+
+# VS Code Marketplace — only needed to run fetch-vscode-extension-shas.sh from
+# inside the container (image-build extension downloads are not firewalled).
+marketplace.visualstudio.com
+*.gallery.vsassets.io
