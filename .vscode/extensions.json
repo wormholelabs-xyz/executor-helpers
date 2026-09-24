@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "anthropic.claude-code",
+    "eamodio.gitlens",
+    "esbenp.prettier-vscode",
+    "streetsidesoftware.code-spell-checker",
+    "bierner.markdown-mermaid",
+    "rust-lang.rust-analyzer",
+    "tamasfe.even-better-toml",
+    "JuanBlanco.solidity"
+  ],
+  "unwantedRecommendations": []
+}

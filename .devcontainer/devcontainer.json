@@ -1,0 +1,128 @@
+{
+  "name": "Executor Helpers - ${localWorkspaceFolderBasename}",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "TZ": "${localEnv:TZ:America/Los_Angeles}",
+      "CLAUDE_CODE_VERSION": "2.1.280",
+      "CLAUDE_CODE_CHECKSUM_AMD64": "1e08503dbdf3c2cb0d706d32f3408277388d1c76ef108673e8fe42c1b322925b",
+      "CLAUDE_CODE_CHECKSUM_ARM64": "92f2b4fd05d0bdcf7b9a0d4e0ecef4a1e4b368b290cd8fd07cff9a50013f45a2",
+      "GIT_DELTA_VERSION": "0.18.2",
+      "GIT_DELTA_CHECKSUM_AMD64": "1658c7b61825d411b50734f34016101309e4b6e7f5799944cf8e4ac542cebd7f",
+      "GIT_DELTA_CHECKSUM_ARM64": "937781aa7788e1510858743fff6c9a8b4a69fe0a22a7c8a69493e633227939a9",
+      "CASTELLAN_VERSION": "0.2.0",
+      "CASTELLAN_CHECKSUM_AMD64": "85b112642d56d3faa1aba48905a48b4e842e74741580a1d716e7a7b185ec9156",
+      "CASTELLAN_CHECKSUM_ARM64": "ca1cce6df1adc128140cfab0a0fd3446b152ee5a533ee5d5ca3c9c90da0b0660",
+      "OHMYZSH_COMMIT": "c954bbb168fc645592c50017de0d0e138db8df5f",
+      "POWERLEVEL10K_COMMIT": "35833ea15f14b71dbcebc7e54c104d8d56ca5268",
+      "FOUNDRY_VERSION": "1.3.6",
+      "FOUNDRY_CHECKSUM_AMD64": "01248d7ce267f5b7958bc9b331d068c6c2d8eeb182e58f0b556d7295f398e2ce",
+      "FOUNDRY_CHECKSUM_ARM64": "f87fedd5e66f73d2485a68b4a339fe46625426e4878e7da75a39e359065d176c",
+      "RUSTUP_VERSION": "1.29.1",
+      "RUSTUP_CHECKSUM_AMD64": "dda7234360b7f578ca8b0ddcb80145646fa61a67c1720a5abc7051b35c9fcb71",
+      "RUSTUP_CHECKSUM_ARM64": "15f6e4ce9f583b929c996c91562bad6d4454f3281de858b02cdfdef615fac433",
+      "RUST_VERSION": "1.89.0",
+      "RUST_EXTRA_VERSION": "1.97.1",
+      "SOLANA_VERSION": "2.3.13",
+      "SOLANA_CHECKSUM_AMD64": "c43539ebdf6942472e8b87635d6ea55f428a51e3d0219f7b6f720fc6b19fade0",
+      "AGAVE_COMMIT": "5466f4592b1983adb13ba0a5d53f41ea2de69fba",
+      "AGAVE_RUST_VERSION": "1.86.0",
+      "PLATFORM_TOOLS_VERSION": "v1.48",
+      "PLATFORM_TOOLS_CHECKSUM_AMD64": "a9d3157f937d5f6faf4321a35a8035e0f827114a663b0150db492e893ec27597",
+      "PLATFORM_TOOLS_CHECKSUM_ARM64": "aec6022222f7b9e24790366484bcc6cf9f6696377bb98f541c8869e2f31e70f2",
+      "ANCHOR_VERSION": "0.32.1",
+      "ANCHOR_COMMIT": "1ebbe58158d089a2a40b5e35ebead5a10db9090d",
+      "BUN_VERSION": "1.3.13",
+      "BUN_CHECKSUM_AMD64": "79c0771fa8b92c33aae41e15a0e0d307ea99d0e2f00317c71c6c53237a78e25a",
+      "BUN_CHECKSUM_ARM64": "70bae41b3908b0a120e1e58c5c8af30e74afae3b8d11b0d3fdd8e787ddfb4b22",
+      "JUST_VERSION": "1.58.0",
+      "JUST_CHECKSUM_AMD64": "4a5cc2f53e6f0f8c59092a6cc38291eb729d46a7dd95d3ae582008881b84931d",
+      "JUST_CHECKSUM_ARM64": "748237128c4c40cbdabc65e841d05ceba13cc23a91eaba395495894c1d9764df",
+      "SURFPOOL_VERSION": "1.6.0",
+      "SURFPOOL_COMMIT": "050a81b9f366a813d2f3da810bf6fbc52f1047ac",
+      "SURFPOOL_CHECKSUM_AMD64": "cb471b00aa3b7d603338eb74ebfec1d23959ecba005b5f1be42ba8d174107fc2",
+      "APTOS_VERSION": "7.2.0",
+      "APTOS_CHECKSUM_AMD64": "f14b4b8005fad23eae1b7c4c8a4ce3d67acebb9230e1a3eb168fed5ceade140c",
+      "APTOS_CHECKSUM_ARM64": "4c4ab345f6d3ffab6e4ba13ee2b1569afe8bf02671d15368d8e6ecb9bfa98601",
+      "CLAUDE_CODE_EXT_VERSION": "2.1.280",
+      "CLAUDE_CODE_EXT_SHA256": "amd64=8aad2ee3df0ba6f254de5e60433a78b2a81c8ff26f0e48bbf567ed1c57d6a77a,arm64=7e30db028f4bb41ff11baee95bf8ce60809c02678e2e957f58858e94cf540d47",
+      "GITLENS_EXT_VERSION": "19.1.0",
+      "GITLENS_EXT_SHA256": "f89e5653ba9f57ffc8f32a8771f5ad9e9622d090ab39bdcfd8c15625cac568ce",
+      "PRETTIER_EXT_VERSION": "12.4.0",
+      "PRETTIER_EXT_SHA256": "46d22a567b35ebe5bdffd7280457742cd67e65d7e1b250bb775ab2be86479a42",
+      "SPELLCHECKER_EXT_VERSION": "4.7.3",
+      "SPELLCHECKER_EXT_SHA256": "c6fbf0fbc26f46d7b77f7666db83737e314c79302429e512d04aaac45a0497fd",
+      "MARKDOWN_MERMAID_EXT_VERSION": "1.32.1",
+      "MARKDOWN_MERMAID_EXT_SHA256": "6c7f0905939f8f62a6e7fb5f6a24b3ae43a5da4394f97c1972e58ea54f625443",
+      "RUST_ANALYZER_EXT_VERSION": "0.3.3041",
+      "RUST_ANALYZER_EXT_SHA256": "amd64=0b8ce8b4baddcaecd58980d4778883cdfca273597f7d4c9680338bbaed6ab2f0,arm64=f33d35db89c12bf5cb09f3c2280f3ba88e7c34727f93fefb6afec6ffbb766384",
+      "EVEN_BETTER_TOML_EXT_VERSION": "0.21.2",
+      "EVEN_BETTER_TOML_EXT_SHA256": "21b8d66af4285eee31e21a4492f921ab36dffcd859a67f1115d2930274650808",
+      "SOLIDITY_EXT_VERSION": "0.0.187",
+      "SOLIDITY_EXT_SHA256": "3b45462d206eec526bb825256632fa97eb13897263634c28cf7b0ca95cf2161b"
+    }
+  },
+  "runArgs": [
+    "--cap-add=NET_ADMIN",
+    "--cap-add=NET_RAW",
+    "--sysctl=net.ipv4.conf.all.route_localnet=1"
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [],
+      "settings": {
+        "extensions.autoUpdate": false,
+        "extensions.autoCheckUpdates": false,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "files.insertFinalNewline": true,
+        "[solidity]": {
+          "editor.defaultFormatter": "JuanBlanco.solidity"
+        },
+        "solidity.formatter": "forge",
+        "[rust]": {
+          "editor.defaultFormatter": "rust-lang.rust-analyzer"
+        },
+        "rust-analyzer.check.command": "clippy",
+        "rust-analyzer.linkedProjects": [
+          "svm/relay_cost_protection/Cargo.toml",
+          "svm/post-vaa-relay/Cargo.toml"
+        ],
+        "[toml]": {
+          "editor.defaultFormatter": "tamasfe.even-better-toml"
+        },
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "bash",
+            "icon": "terminal-bash"
+          },
+          "zsh": {
+            "path": "zsh"
+          }
+        }
+      }
+    }
+  },
+  "remoteUser": "node",
+  "mounts": [
+    "source=claude-code-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
+    "source=claude-code-config-${devcontainerId},target=/home/node/.claude,type=volume",
+    "source=executor-helpers-cargo-registry-${devcontainerId},target=/home/node/.cargo/registry,type=volume",
+    "source=executor-helpers-cargo-git-${devcontainerId},target=/home/node/.cargo/git,type=volume",
+    "source=executor-helpers-solana-cache-${devcontainerId},target=/home/node/.cache/solana,type=volume",
+    "source=executor-helpers-svm-${devcontainerId},target=/home/node/.svm,type=volume",
+    "source=/dev/null,target=/workspace/.env,type=bind,consistency=delegated"
+  ],
+  "containerEnv": {
+    "CLAUDE_CONFIG_DIR": "/home/node/.claude",
+    "POWERLEVEL9K_DISABLE_GITSTATUS": "true",
+    "LC_ALL": "C.UTF-8",
+    "LANG": "C.UTF-8"
+  },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
+  "workspaceFolder": "/workspace",
+  "initializeCommand": "[ -e .env ] || touch .env",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postStartCommand": "sudo /usr/local/bin/init-firewall.sh"
+}
