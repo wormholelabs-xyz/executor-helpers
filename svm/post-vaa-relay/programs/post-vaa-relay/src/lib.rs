@@ -47,63 +47,65 @@ pub const ACCOUNT_COUNT: usize = 9;
 /// Accounts forwarded to `post_vaa`.
 pub const CPI_ACCOUNT_COUNT: usize = 8;
 
-/// Core bridge program ids per network. Byte arrays are the base58 decoded
-/// keys; `tests/relay.rs` asserts each pair matches.
-pub mod core_bridge_ids {
-    use pinocchio::pubkey::Pubkey;
+/// Core bridge program id the relay accepts as CPI target, from the
+/// compile-time environment. Set `CORE_BRIDGE_ADDRESS` to a base58 program
+/// id; `just build <net>` sets it for the known networks.
+pub const CORE_BRIDGE_ID_BASE58: &str = env!(
+    "CORE_BRIDGE_ADDRESS",
+    "set CORE_BRIDGE_ADDRESS to the core bridge program id (base58); `just build mainnet|testnet|localnet` does this"
+);
+pub const CORE_BRIDGE_ID: Pubkey = decode_base58_pubkey(CORE_BRIDGE_ID_BASE58);
 
-    pub const MAINNET: Pubkey = [
-        14, 10, 88, 154, 65, 165, 95, 189, 102, 197, 42, 71, 95, 45, 146, 166, 211, 220, 155, 71,
-        71, 17, 76, 185, 175, 130, 90, 152, 181, 69, 211, 206,
-    ];
-    pub const MAINNET_BASE58: &str = "worm2ZoG2kUd4vFXhvjh93UUH596ayRfgQ2MgjNMTth";
+/// Decodes a base58 string into exactly 32 bytes. Evaluated at compile time
+/// for [`CORE_BRIDGE_ID`]; panics on an invalid character, a value above 32
+/// bytes, or a non-canonical encoding (leading `1`s must equal leading zero bytes).
+pub const fn decode_base58_pubkey(s: &str) -> Pubkey {
+    const ALPHABET: &[u8; 58] = b"123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+    let bytes = s.as_bytes();
+    assert!(bytes.len() >= 32, "base58 pubkey too short");
+    assert!(bytes.len() <= 44, "base58 pubkey too long");
 
-    /// Wormhole "testnet" is the Solana devnet cluster.
-    pub const TESTNET: Pubkey = [
-        43, 18, 70, 201, 238, 250, 60, 70, 103, 146, 37, 49, 17, 243, 95, 236, 30, 232, 238, 94,
-        157, 235, 196, 18, 210, 233, 173, 173, 254, 205, 204, 114,
-    ];
-    pub const TESTNET_BASE58: &str = "3u8hJUVTA4jH1wYAyUur7FFZVQ8H635K3tSHHF4ssjQ5";
+    let mut out = [0u8; 32];
+    let mut i = 0;
+    while i < bytes.len() {
+        let mut digit = 58;
+        let mut j = 0;
+        while j < ALPHABET.len() {
+            if ALPHABET[j] == bytes[i] {
+                digit = j;
+                break;
+            }
+            j += 1;
+        }
+        assert!(digit < 58, "invalid base58 character");
 
-    /// Tilt devnet.
-    pub const LOCALNET: Pubkey = [
-        2, 200, 6, 49, 44, 190, 91, 121, 239, 138, 166, 193, 126, 63, 66, 61, 143, 223, 225, 212,
-        105, 9, 251, 31, 108, 223, 101, 238, 142, 46, 111, 170,
-    ];
-    pub const LOCALNET_BASE58: &str = "Bridge1p5gheXUvJ6jGWGeCsgPKgnE3YgdGKRVCMY9o";
+        // out = out * 58 + digit, big-endian.
+        let mut carry = digit;
+        let mut k = out.len();
+        while k > 0 {
+            k -= 1;
+            let v = out[k] as usize * 58 + carry;
+            out[k] = (v & 0xff) as u8;
+            carry = v >> 8;
+        }
+        assert!(carry == 0, "base58 value exceeds 32 bytes");
+        i += 1;
+    }
+
+    let mut leading_ones = 0;
+    while leading_ones < bytes.len() && bytes[leading_ones] == b'1' {
+        leading_ones += 1;
+    }
+    let mut leading_zeros = 0;
+    while leading_zeros < out.len() && out[leading_zeros] == 0 {
+        leading_zeros += 1;
+    }
+    assert!(
+        leading_ones == leading_zeros,
+        "non-canonical base58 for 32 bytes"
+    );
+    out
 }
-
-/// Core bridge program id for the selected network feature.
-#[cfg(feature = "mainnet")]
-pub const CORE_BRIDGE_ID: Pubkey = core_bridge_ids::MAINNET;
-#[cfg(feature = "mainnet")]
-pub const CORE_BRIDGE_ID_BASE58: &str = core_bridge_ids::MAINNET_BASE58;
-
-/// Core bridge program id for the selected network feature.
-#[cfg(feature = "testnet")]
-pub const CORE_BRIDGE_ID: Pubkey = core_bridge_ids::TESTNET;
-#[cfg(feature = "testnet")]
-pub const CORE_BRIDGE_ID_BASE58: &str = core_bridge_ids::TESTNET_BASE58;
-
-/// Core bridge program id for the selected network feature.
-#[cfg(feature = "localnet")]
-pub const CORE_BRIDGE_ID: Pubkey = core_bridge_ids::LOCALNET;
-#[cfg(feature = "localnet")]
-pub const CORE_BRIDGE_ID_BASE58: &str = core_bridge_ids::LOCALNET_BASE58;
-
-#[cfg(not(any(feature = "mainnet", feature = "testnet", feature = "localnet")))]
-compile_error!("enable exactly one network feature: mainnet, testnet or localnet");
-#[cfg(not(any(feature = "mainnet", feature = "testnet", feature = "localnet")))]
-pub const CORE_BRIDGE_ID: Pubkey = [0; 32];
-#[cfg(not(any(feature = "mainnet", feature = "testnet", feature = "localnet")))]
-pub const CORE_BRIDGE_ID_BASE58: &str = "";
-
-#[cfg(any(
-    all(feature = "mainnet", feature = "testnet"),
-    all(feature = "mainnet", feature = "localnet"),
-    all(feature = "testnet", feature = "localnet"),
-))]
-compile_error!("network features mainnet, testnet and localnet are mutually exclusive");
 
 /// Preconditions: exactly [`ACCOUNT_COUNT`] accounts, account 0 is the
 /// executable [`CORE_BRIDGE_ID`], data starts with [`POST_VAA_DISCRIMINATOR`].

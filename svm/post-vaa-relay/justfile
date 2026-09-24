@@ -1,26 +1,36 @@
-# `net` is the network feature: mainnet, testnet (Solana devnet cluster) or
-# localnet. It selects the core bridge id the relay accepts. It has no default.
+# `network` selects the core bridge program id the relay accepts: mainnet,
+# testnet (Solana devnet cluster), localnet, or any base58 address for a fork.
+# It becomes the compile-time env var CORE_BRIDGE_ADDRESS. There is no default.
+
+# Resolve a network name to its core bridge address; pass other values through.
+_address network:
+    @case "{{network}}" in \
+      mainnet)  echo worm2ZoG2kUd4vFXhvjh93UUH596ayRfgQ2MgjNMTth ;; \
+      testnet)  echo 3u8hJUVTA4jH1wYAyUur7FFZVQ8H635K3tSHHF4ssjQ5 ;; \
+      localnet) echo Bridge1p5gheXUvJ6jGWGeCsgPKgnE3YgdGKRVCMY9o ;; \
+      *)        echo "{{network}}" ;; \
+    esac
 
 # Build both SBF programs into target/deploy. Tests load the ELFs from there.
-build net:
-    cd programs/post-vaa-relay && cargo build-sbf -- --locked --features {{net}}
+build network:
+    cd programs/post-vaa-relay && CORE_BRIDGE_ADDRESS=$(just _address {{network}}) cargo build-sbf -- --locked
     cd programs/cpi-stub && cargo build-sbf -- --locked
 
 # Host lint for the selected network.
-check net:
-    cargo clippy --locked -p post-vaa-relay --features {{net}} --all-targets -- -D warnings
+check network:
+    CORE_BRIDGE_ADDRESS=$(just _address {{network}}) cargo clippy --locked -p post-vaa-relay --all-targets -- -D warnings
     cargo clippy --locked -p post-vaa-relay-cpi-stub --all-targets -- -D warnings
 
 # Build the ELFs, then run the mollusk tests against them.
-test net: (build net)
-    cargo test --locked -p post-vaa-relay --features {{net}}
+test network: (build network)
+    CORE_BRIDGE_ADDRESS=$(just _address {{network}}) cargo test --locked -p post-vaa-relay --test relay
 
 # Fetch core bridge state and the fixture VAA through the RPC proxy.
-fetch-fixtures net:
-    bun scripts/fetch-fixtures.ts {{net}}
+fetch-fixtures network:
+    bun scripts/fetch-fixtures.ts {{network}}
 
 # Build the relay ELF, then run the surfpool end-to-end tests. Every
 # transaction is a v1 transaction. Needs surfpool >= 1.6.0 on PATH.
-surfpool-test net: (build net)
-    test -f target/fixtures/{{net}}/core_bridge_programdata.json || just fetch-fixtures {{net}}
-    cargo test --locked -p post-vaa-relay --features {{net}} --test surfpool_e2e -- --include-ignored --nocapture --test-threads=1
+surfpool-test network: (build network)
+    test -f target/fixtures/{{network}}/core_bridge_programdata.json || just fetch-fixtures {{network}}
+    CORE_BRIDGE_ADDRESS=$(just _address {{network}}) cargo test --locked -p post-vaa-relay --test surfpool_e2e -- --include-ignored --nocapture --test-threads=1

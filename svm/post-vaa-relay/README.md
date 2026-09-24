@@ -2,17 +2,18 @@
 
 `post-vaa-relay` is a pinocchio program. It makes one CPI into the Wormhole core bridge `post_vaa` instruction. It passes `signature_set` as read-only. This lets `verify_signatures` and `post_vaa` share one transaction.
 
-The program checks account 0 against a compile-time core bridge program id. Enable exactly one network feature to select it:
+The program checks account 0 against a compile-time core bridge program id. The build reads it from the environment variable `CORE_BRIDGE_ADDRESS` (base58). There is no default. A fork sets its own address. The `just` recipes accept a network name and resolve it:
 
-| Feature | Core bridge program id | Cluster |
+| `network` argument | Core bridge program id | Cluster |
 |---|---|---|
 | `mainnet` | `worm2ZoG2kUd4vFXhvjh93UUH596ayRfgQ2MgjNMTth` | Solana mainnet-beta |
 | `testnet` | `3u8hJUVTA4jH1wYAyUur7FFZVQ8H635K3tSHHF4ssjQ5` | Solana devnet |
 | `localnet` | `Bridge1p5gheXUvJ6jGWGeCsgPKgnE3YgdGKRVCMY9o` | Tilt devnet |
+| any other value | used as the address | a fork |
 
 ## Build
 
-Install `just`. Run the recipes from this directory. Each recipe takes the network as its argument. There is no default.
+Install `just`. Run the recipes from this directory. Each recipe takes the network as its argument.
 
 ```bash
 just build testnet

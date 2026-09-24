@@ -17,7 +17,7 @@ use solana_sdk_ids::system_program;
 use solana_signer::Signer;
 use surfpool::{
     core_bridge::{self, quorum},
-    tx_v1, Env, BUDGET, NETWORK,
+    network, tx_v1, Env, BUDGET,
 };
 
 /// Relay account index that holds the core bridge program.
@@ -112,7 +112,8 @@ fn pdas_match_fixture_pubkeys() {
 fn posts_vaa_through_relay_in_one_v1_transaction() {
     let env = surfpool::setup();
     eprintln!(
-        "[e2e] {NETWORK} VAA {} ({} signatures)",
+        "[e2e] {} VAA {} ({} signatures)",
+        network(),
         env.vaa_id,
         env.vaa.signatures.len()
     );

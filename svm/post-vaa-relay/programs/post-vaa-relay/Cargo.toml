@@ -8,14 +8,8 @@ edition = "2021"
 crate-type = ["cdylib", "lib"]
 name = "post_vaa_relay"
 
-# Exactly one network feature must be enabled. It selects the core bridge
-# program id the relay accepts as CPI target.
-[features]
-default = []
-mainnet = []
-# Wormhole "testnet" is the Solana devnet cluster.
-testnet = []
-localnet = []
+# The core bridge program id comes from the compile-time env var
+# CORE_BRIDGE_ADDRESS (base58). See src/lib.rs and the justfile.
 
 [dependencies]
 pinocchio = "=0.9.3"

@@ -11,4 +11,4 @@ pub mod surfnet;
 pub mod tx_v1;
 
 pub use env::{setup, Env, BUDGET};
-pub use fixtures::{core_bridge_id, load_account_fixture, load_vaa_fixture, NETWORK};
+pub use fixtures::{core_bridge_id, load_account_fixture, load_vaa_fixture, network};

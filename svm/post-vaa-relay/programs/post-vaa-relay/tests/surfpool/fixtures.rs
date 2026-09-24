@@ -18,20 +18,45 @@ use super::{
     surfnet::Account,
 };
 
-#[cfg(feature = "mainnet")]
-pub const NETWORK: &str = "mainnet";
-#[cfg(feature = "testnet")]
-pub const NETWORK: &str = "testnet";
-#[cfg(feature = "localnet")]
-compile_error!("the surfpool harness has fixtures for mainnet and testnet only");
+/// Fixture sets under `tests/fixtures/`, with the SHA-256 of each set's core
+/// bridge ELF (programdata bytes `[45..]`). Update a pin on purpose, after a
+/// review of the upgrade.
+const FIXTURE_SETS: [(&str, &str); 2] = [
+    (
+        "mainnet",
+        "a9ce97f30d37f905ee55c7e72d3777c9fc6c5108a501d9e790526a9ffb3a5af1",
+    ),
+    (
+        "testnet",
+        "dc269ff28697ef331426f512e784c3193df05f9c1671d5ee16f2a09c38aee224",
+    ),
+];
 
-/// SHA-256 of the core bridge ELF (programdata bytes `[45..]`) for the network.
-#[cfg(feature = "mainnet")]
-pub const CORE_BRIDGE_ELF_SHA256: &str =
-    "a9ce97f30d37f905ee55c7e72d3777c9fc6c5108a501d9e790526a9ffb3a5af1";
-#[cfg(feature = "testnet")]
-pub const CORE_BRIDGE_ELF_SHA256: &str =
-    "dc269ff28697ef331426f512e784c3193df05f9c1671d5ee16f2a09c38aee224";
+/// The fixture set whose `core_bridge_program.json` pubkey equals the
+/// compiled-in `CORE_BRIDGE_ADDRESS`. Panics when no set matches.
+pub fn network() -> &'static str {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures");
+    for (name, _) in FIXTURE_SETS {
+        let path = root.join(name).join("core_bridge_program.json");
+        let fixture = account_fixture_from_json(&read_json(&path), &path);
+        if fixture.pubkey == core_bridge_id() {
+            return name;
+        }
+    }
+    panic!(
+        "no fixture set under tests/fixtures matches CORE_BRIDGE_ADDRESS={}; sets exist for {:?}",
+        post_vaa_relay::CORE_BRIDGE_ID_BASE58,
+        FIXTURE_SETS.map(|(name, _)| name)
+    );
+}
+
+fn elf_sha256_pin(network: &str) -> &'static str {
+    FIXTURE_SETS
+        .iter()
+        .find(|(name, _)| *name == network)
+        .map(|(_, sha)| *sha)
+        .unwrap_or_else(|| panic!("no ELF pin for fixture set {network}"))
+}
 
 /// Upgradeable loader programdata header: `UpgradeableLoaderState::ProgramData`.
 pub const PROGRAMDATA_HEADER_LEN: usize = 45;
@@ -48,7 +73,7 @@ pub fn core_bridge_id() -> Pubkey {
 fn fixtures_dir() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("tests/fixtures")
-        .join(NETWORK)
+        .join(network())
 }
 
 fn workspace_target_dir() -> PathBuf {
@@ -105,15 +130,16 @@ pub fn load_vaa_fixture() -> (String, ParsedVaa) {
 }
 
 /// Core bridge ELF sliced from the programdata fixture in `target/fixtures`,
-/// checked against [`CORE_BRIDGE_ELF_SHA256`].
+/// checked against its pin in `FIXTURE_SETS`.
 pub fn load_core_bridge_elf() -> Vec<u8> {
+    let network = network();
     let path = workspace_target_dir()
         .join("fixtures")
-        .join(NETWORK)
+        .join(network)
         .join("core_bridge_programdata.json");
     assert!(
         path.exists(),
-        "{} missing: run `just fetch-fixtures {NETWORK}`",
+        "{} missing: run `just fetch-fixtures {network}`",
         path.display()
     );
     let fixture = account_fixture_from_json(&read_json(&path), &path);
@@ -124,8 +150,9 @@ pub fn load_core_bridge_elf() -> Vec<u8> {
     let elf = fixture.account.data[PROGRAMDATA_HEADER_LEN..].to_vec();
     let digest = hex_encode(&Sha256::digest(&elf));
     assert_eq!(
-        digest, CORE_BRIDGE_ELF_SHA256,
-        "core bridge ELF for {NETWORK} changed; review the upgrade, then update the pin"
+        digest,
+        elf_sha256_pin(network),
+        "core bridge ELF for {network} changed; review the upgrade, then update the pin"
     );
     elf
 }
@@ -134,8 +161,9 @@ pub fn load_relay_elf() -> Vec<u8> {
     let path = workspace_target_dir().join("deploy/post_vaa_relay.so");
     std::fs::read(&path).unwrap_or_else(|e| {
         panic!(
-            "{}: {e}. Run `just build {NETWORK}` so the ELF matches this test's network feature",
-            path.display()
+            "{}: {e}. Run `just build {}` so the ELF matches this test's CORE_BRIDGE_ADDRESS",
+            path.display(),
+            network()
         )
     })
 }

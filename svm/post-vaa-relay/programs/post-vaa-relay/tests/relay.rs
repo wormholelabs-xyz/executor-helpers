@@ -1,5 +1,5 @@
 //! Mollusk tests. Run `just test`: the ELFs must be built for the same
-//! network feature as this test binary.
+//! `CORE_BRIDGE_ADDRESS` as this test binary.
 
 use core::str::FromStr;
 
@@ -116,26 +116,66 @@ fn post_vaa_data() -> Vec<u8> {
 }
 
 #[test]
-fn core_bridge_ids_match_base58() {
-    use post_vaa_relay::core_bridge_ids::*;
-    let cases: [(&str, [u8; 32], &str); 3] = [
-        ("mainnet", MAINNET, MAINNET_BASE58),
-        ("testnet", TESTNET, TESTNET_BASE58),
-        ("localnet", LOCALNET, LOCALNET_BASE58),
+fn const_base58_decoder_matches_solana_pubkey() {
+    use post_vaa_relay::decode_base58_pubkey;
+    let cases = [
+        ("system program", "11111111111111111111111111111111"),
+        (
+            "clock sysvar",
+            "SysvarC1ock11111111111111111111111111111111",
+        ),
+        (
+            "token program",
+            "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        ),
+        (
+            "upgradeable loader",
+            "BPFLoaderUpgradeab1e11111111111111111111111",
+        ),
+        (
+            "secp256k1 precompile",
+            "KeccakSecp256k11111111111111111111111111111",
+        ),
+        ("compiled-in core bridge", CORE_BRIDGE_ID_BASE58),
     ];
-    for (name, bytes, base58) in cases {
-        let decoded = Pubkey::from_str(base58).expect(name);
-        assert_eq!(decoded.to_bytes(), bytes, "{name}: bytes match base58");
+    for (name, base58) in cases {
+        let expected = Pubkey::from_str(base58).expect(name);
+        assert_eq!(decode_base58_pubkey(base58), expected.to_bytes(), "{name}");
         assert_eq!(
-            Pubkey::new_from_array(bytes).to_string(),
+            Pubkey::new_from_array(decode_base58_pubkey(base58)).to_string(),
             base58,
-            "{name}: base58 round trip"
+            "{name}: round trip"
         );
-        assert_ne!(bytes, [0u8; 32], "{name}: non-zero");
     }
-    assert_ne!(MAINNET, TESTNET);
-    assert_ne!(MAINNET, LOCALNET);
-    assert_ne!(TESTNET, LOCALNET);
+}
+
+#[test]
+fn const_base58_decoder_rejects_invalid_input() {
+    use post_vaa_relay::decode_base58_pubkey;
+    // Mutations of the token program id `TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA`.
+    let cases: [(&str, &str); 5] = [
+        ("too short", "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623V"),
+        (
+            "too long",
+            "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DATokenk",
+        ),
+        (
+            "invalid character",
+            "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ0DA",
+        ),
+        (
+            "value above 32 bytes",
+            "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
+        ),
+        (
+            "non-canonical leading zero",
+            "1TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        ),
+    ];
+    for (name, input) in cases {
+        let result = std::panic::catch_unwind(|| decode_base58_pubkey(input));
+        assert!(result.is_err(), "{name}: {input} must be rejected");
+    }
 }
 
 #[test]
